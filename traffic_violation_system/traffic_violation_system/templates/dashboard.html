@@ -1,0 +1,92 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Dashboard | Traffic Violation System{% endblock %}
+
+{% block content %}
+<section class="hero-panel portal-hero mb-4">
+    <div class="lookup-card">
+        <div class="policy-ribbon">No Contact Violation Portal</div>
+        <h1 class="page-title display-2">CHECK YOUR RECORD</h1>
+        <p class="lead-copy mb-4">
+            Search a plate number or driver license number to find related violation cases in the system.
+        </p>
+
+        <form action="/violations/" method="get">
+            <input class="form-control lookup-input" type="text" name="plate" placeholder="Plate number or conduction sticker">
+            <div class="divider-word fw-bold">OR</div>
+            <input class="form-control lookup-input" type="text" name="license" placeholder="Driver license number">
+            <div class="d-flex flex-wrap gap-2 mt-3">
+                <button class="btn btn-primary px-4" type="submit">Check Violations</button>
+                <a class="btn btn-outline-dark" href="/payments/">Pay Fine</a>
+                <a class="btn btn-warning" href="/vehicles/">Vehicle Portal</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="hero-illustration" aria-hidden="true">
+        <div class="officer-arm"></div>
+        <div class="officer-head"></div>
+        <div class="officer-body"></div>
+        <div class="officer-leg"></div>
+    </div>
+</section>
+
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-xl-3">
+        <a class="text-decoration-none text-reset" href="/drivers/">
+            <div class="stat-card">
+                <div class="stat-value">{{ total_drivers }}</div>
+                <div class="stat-label mt-2">Registered Drivers</div>
+                <span class="small text-muted">License holder records</span>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+        <a class="text-decoration-none text-reset" href="/vehicles/">
+            <div class="stat-card">
+                <div class="stat-value">{{ total_vehicles }}</div>
+                <div class="stat-label mt-2">Recorded Vehicles</div>
+                <span class="small text-muted">Plate and model records</span>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+        <a class="text-decoration-none text-reset" href="/violations/">
+            <div class="stat-card">
+                <div class="stat-value">{{ total_violations }}</div>
+                <div class="stat-label mt-2">Violation Cases</div>
+                <span class="small text-muted">Open and settled cases</span>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+        <a class="text-decoration-none text-reset" href="/payments/">
+            <div class="stat-card">
+                <div class="stat-value">{{ total_payments }}</div>
+                <div class="stat-label mt-2">Payment Records</div>
+                <span class="small text-muted">Fine settlement entries</span>
+            </div>
+        </a>
+    </div>
+</div>
+
+<section class="content-panel">
+    <div class="d-flex flex-column flex-md-row justify-content-between gap-3 align-items-md-center">
+        <div>
+            <span class="eyebrow">Quick Entry</span>
+            <h2 class="h4 fw-bold mb-1">Record Management</h2>
+            <p class="text-muted mb-0">Use these shortcuts to add official records through the admin area.</p>
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-outline-dark" href="/admin/drivers/driver/add/">New Driver</a>
+            <a class="btn btn-outline-dark" href="/admin/vehicles/vehicle/add/">New Vehicle</a>
+            <a class="btn btn-outline-dark" href="/admin/violations/violation/add/">New Violation</a>
+            <a class="btn btn-outline-dark" href="/admin/payments/payment/add/">New Payment</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
