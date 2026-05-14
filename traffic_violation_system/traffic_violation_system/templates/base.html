@@ -34,10 +34,9 @@
             min-height: 100vh;
             background:
                 linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0, rgba(255, 255, 255, 0.82) 420px, #f7fbff 421px),
-                radial-gradient(circle at 80% 24%, rgba(85, 181, 219, 0.26), transparent 28%),
                 linear-gradient(90deg, rgba(7, 26, 61, 0.06) 1px, transparent 1px),
                 linear-gradient(0deg, rgba(7, 26, 61, 0.05) 1px, transparent 1px);
-            background-size: auto, auto, 76px 76px, 76px 76px;
+            background-size: auto, 76px 76px, 76px 76px;
         }
 
         .navbar {
@@ -85,9 +84,10 @@
             background: var(--red);
             color: #fff;
             display: inline-flex;
-            min-height: 78px;
-            padding-left: 20px;
-            padding-right: 20px;
+            min-height: 54px;
+            margin-left: 8px;
+            padding-left: 16px;
+            padding-right: 16px;
         }
 
         .notice-bar {
@@ -109,6 +109,7 @@
         .hero-panel,
         .content-panel,
         .stat-card {
+            animation: fadeSlideUp 0.45s ease both;
             background: var(--panel);
             border: 1px solid rgba(255, 255, 255, 0.7);
             border-radius: 8px;
@@ -133,8 +134,8 @@
 
         .portal-hero {
             background:
-                linear-gradient(90deg, rgba(255, 255, 255, 0.98) 0 48%, rgba(223, 244, 255, 0.82) 48% 100%),
-                linear-gradient(90deg, transparent 0 57%, rgba(7, 26, 61, 0.12) 57.2% 57.7%, transparent 57.7% 100%);
+                linear-gradient(90deg, rgba(255, 255, 255, 0.96) 0 47%, rgba(255, 255, 255, 0.38) 47% 100%),
+                url("https://images.unsplash.com/photo-1494522855154-9297ac14b55f?auto=format&fit=crop&w=1800&q=80") center/cover;
             border: 0;
             box-shadow: none;
             min-height: 510px;
@@ -142,75 +143,19 @@
         }
 
         .portal-hero::after {
-            inset: 34px 34px 0 auto;
-            width: min(44vw, 520px);
-            height: 440px;
+            inset: 0;
+            width: auto;
+            height: auto;
             background:
-                linear-gradient(90deg, rgba(7, 26, 61, 0.22) 2px, transparent 2px) 0 0/82px 100%,
-                linear-gradient(rgba(7, 26, 61, 0.22) 2px, transparent 2px) 0 0/100% 68px;
-            border: 3px solid rgba(7, 26, 61, 0.18);
-            opacity: 0.55;
+                linear-gradient(90deg, transparent 0 45%, rgba(7, 26, 61, 0.32) 45% 100%),
+                linear-gradient(180deg, transparent 55%, rgba(7, 26, 61, 0.18));
+            border: 0;
+            opacity: 1;
             pointer-events: none;
         }
 
         .hero-illustration {
-            bottom: 18px;
-            height: 330px;
-            position: absolute;
-            right: clamp(18px, 11vw, 170px);
-            width: 190px;
-            z-index: 1;
-        }
-
-        .officer-head {
-            background: #fff;
-            border: 3px solid #172033;
-            border-radius: 42% 42% 46% 46%;
-            height: 64px;
-            margin: 0 auto;
-            position: relative;
-            width: 58px;
-        }
-
-        .officer-head::before {
-            background: var(--navy);
-            border-radius: 50% 50% 12px 12px;
-            content: "";
-            height: 26px;
-            left: -8px;
-            position: absolute;
-            top: -19px;
-            transform: rotate(-8deg);
-            width: 80px;
-        }
-
-        .officer-body {
-            background: #4f9bd3;
-            border: 3px solid #172033;
-            clip-path: polygon(22% 0, 78% 0, 100% 100%, 0 100%);
-            height: 144px;
-            margin: 4px auto 0;
-            width: 132px;
-        }
-
-        .officer-arm {
-            background: #fff;
-            border: 3px solid #172033;
-            border-bottom: 0;
-            height: 126px;
-            left: 32px;
-            position: absolute;
-            top: 4px;
-            transform: rotate(14deg);
-            transform-origin: bottom;
-            width: 28px;
-        }
-
-        .officer-leg {
-            background: #172033;
-            height: 94px;
-            margin: 0 auto;
-            width: 90px;
+            display: none;
         }
 
         .eyebrow {
@@ -243,7 +188,10 @@
         }
 
         .lookup-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
             max-width: 620px;
+            padding: clamp(18px, 3vw, 28px);
             position: relative;
             z-index: 2;
         }
@@ -276,6 +224,12 @@
         .btn {
             border-radius: 6px;
             font-weight: 700;
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .btn:hover {
+            box-shadow: 0 10px 22px rgba(15, 23, 42, 0.14);
+            transform: translateY(-1px);
         }
 
         .btn-primary {
@@ -289,6 +243,71 @@
             color: #1b2433;
         }
 
+        .auth-panel {
+            margin: 40px auto;
+            max-width: 520px;
+        }
+
+        .checkout-panel {
+            margin: 40px auto;
+            max-width: 920px;
+        }
+
+        .auth-panel input {
+            border: 1px solid rgba(7, 26, 61, 0.22);
+            border-radius: 6px;
+            min-height: 44px;
+            padding: 9px 12px;
+            width: 100%;
+        }
+
+        .settings-wrap {
+            margin: 34px auto;
+            max-width: 980px;
+        }
+
+        .settings-title {
+            font-weight: 850;
+            text-align: center;
+        }
+
+        .settings-group-title {
+            color: var(--blue);
+            font-weight: 850;
+            margin: 28px 0 12px;
+        }
+
+        .settings-row {
+            align-items: center;
+            background: #fff;
+            border: 1px solid rgba(7, 26, 61, 0.1);
+            border-radius: 8px;
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+            display: flex;
+            gap: 14px;
+            justify-content: space-between;
+            min-height: 70px;
+            padding: 16px 18px;
+        }
+
+        .settings-row + .settings-row {
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+            margin-top: -1px;
+        }
+
+        .settings-icon {
+            align-items: center;
+            background: #eaf2ff;
+            border-radius: 999px;
+            color: var(--blue);
+            display: inline-flex;
+            font-weight: 850;
+            height: 42px;
+            justify-content: center;
+            min-width: 42px;
+        }
+
         .stat-card {
             padding: 20px;
             height: 100%;
@@ -298,6 +317,28 @@
         .stat-card:hover {
             box-shadow: 0 20px 54px rgba(15, 23, 42, 0.16);
             transform: translateY(-3px);
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+            }
         }
 
         .stat-value {
@@ -393,7 +434,16 @@
                     <a class="nav-link" href="/payments/">Pay Fine</a>
                     <a class="nav-link" href="/vehicles/">Vehicle Portal</a>
                     <a class="nav-link" href="/drivers/">Drivers</a>
-                    <a class="nav-link" href="/admin/">Admin</a>
+                    {% if user.is_authenticated %}
+                    <a class="nav-link" href="/accounts/settings/">Settings</a>
+                    <form action="/accounts/logout/" method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button class="nav-link btn btn-link px-lg-2" type="submit">Logout</button>
+                    </form>
+                    {% else %}
+                    <a class="nav-link" href="/accounts/login/">Login</a>
+                    <a class="nav-link" href="/accounts/signup/">Sign Up</a>
+                    {% endif %}
                     <a class="nav-link nav-alert" href="/violations/">Check Violations</a>
                 </div>
             </div>
@@ -402,8 +452,12 @@
 
     <div class="notice-bar">
         <div class="container d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2">
-            <span>Manage vehicle records and review violations from one account.</span>
-            <a class="btn btn-warning btn-sm" href="/vehicles/">Visit Vehicle Portal</a>
+            <span>Check violations, view vehicle records, and pay fines using one public account.</span>
+            {% if user.is_authenticated %}
+            <a class="btn btn-warning btn-sm" href="/accounts/settings/">Account Settings</a>
+            {% else %}
+            <a class="btn btn-warning btn-sm" href="/accounts/signup/">Create Account</a>
+            {% endif %}
         </div>
     </div>
 

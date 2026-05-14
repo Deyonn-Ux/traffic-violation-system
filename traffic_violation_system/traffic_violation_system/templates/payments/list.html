@@ -41,12 +41,13 @@
                         <span>GCash</span>
                         <span>Maya</span>
                         <span>Visa</span>
-                        <span>Mastercard</span>
-                        <span>QR Ph</span>
-                        <span>GrabPay</span>
                     </div>
                     <p class="text-muted mt-3 mb-3">Your payment is encrypted and securely processed.</p>
-                    <a class="btn btn-primary px-5" href="/admin/payments/payment/add/">Proceed to Payment</a>
+                    {% if user.is_authenticated %}
+                    <a class="btn btn-primary px-5" href="/payments/checkout/">Proceed to Payment</a>
+                    {% else %}
+                    <a class="btn btn-primary px-5" href="/accounts/signup/">Sign Up to Pay</a>
+                    {% endif %}
                 </div>
             </div>
 
@@ -56,18 +57,22 @@
                     <div class="payment-icon payment-icon-red">D</div>
                     <div class="flex-grow-1">
                         <h3 class="h5 fw-bold mb-1">Digital Payment</h3>
-                        <p class="text-muted mb-0">Pay through partner apps with guided steps.</p>
+                        <p class="text-muted mb-0">Pay through partner apps after entering your ticket reference.</p>
                     </div>
                     <button class="btn btn-sm btn-link text-dark text-decoration-none" type="button" data-payment-toggle>Show</button>
                 </div>
                 <div class="payment-option-body d-none">
                     <div class="payment-logos">
-                        <span>Online Banking</span>
+                        <span>Bank App</span>
                         <span>E-Wallet</span>
                         <span>QR Transfer</span>
                     </div>
-                    <p class="text-muted mt-3 mb-3">After paying through your selected partner, save the reference number and record the payment.</p>
-                    <a class="btn btn-primary px-5" href="/admin/payments/payment/add/">Record Digital Payment</a>
+                    <p class="text-muted mt-3 mb-3">Use the ticket number issued by the enforcer or shown in the violation search result.</p>
+                    {% if user.is_authenticated %}
+                    <a class="btn btn-primary px-5" href="/payments/checkout/">Continue Digital Payment</a>
+                    {% else %}
+                    <a class="btn btn-primary px-5" href="/accounts/signup/">Sign Up to Pay</a>
+                    {% endif %}
                 </div>
             </div>
 
@@ -77,13 +82,17 @@
                     <div class="payment-icon payment-icon-gold">O</div>
                     <div class="flex-grow-1">
                         <h3 class="h5 fw-bold mb-1">Over-the-Counter</h3>
-                        <p class="text-muted mb-0">Settle fines at an authorized office or payment center.</p>
+                        <p class="text-muted mb-0">Settle the fine at an authorized office or payment center.</p>
                     </div>
                     <button class="btn btn-sm btn-link text-dark text-decoration-none" type="button" data-payment-toggle>Show</button>
                 </div>
                 <div class="payment-option-body d-none">
-                    <p class="text-muted mb-3">Bring the violation details and keep the receipt until the payment status is updated.</p>
-                    <a class="btn btn-primary px-5" href="/admin/payments/payment/add/">Record Counter Payment</a>
+                    <p class="text-muted mb-3">Bring your ticket/reference number and keep the official receipt until the violation status is updated.</p>
+                    {% if user.is_authenticated %}
+                    <a class="btn btn-primary px-5" href="/payments/checkout/">Prepare Counter Receipt</a>
+                    {% else %}
+                    <a class="btn btn-primary px-5" href="/accounts/signup/">Sign Up to Pay</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -94,7 +103,7 @@
                 <p class="text-muted">Faster, safer, official.</p>
                 <div class="benefit-item"><span>Fast</span> Faster Processing</div>
                 <div class="benefit-item"><span>Lock</span> Secure Payment</div>
-                <div class="benefit-item"><span>OK</span> Official Channels</div>
+                <div class="benefit-item"><span>OK</span> Online and counter channels</div>
                 <div class="benefit-item"><span>Easy</span> Less Hassle</div>
                 <p class="text-muted mb-0 mt-4">Retain your receipt until your status is updated.</p>
             </aside>
@@ -108,7 +117,9 @@
             <span class="eyebrow">Payment History</span>
             <h2 class="h4 fw-bold mb-0">Payment Records</h2>
         </div>
-        <a class="btn btn-outline-dark" href="/admin/payments/payment/add/">Add Payment Record</a>
+        {% if not user.is_authenticated %}
+        <a class="btn btn-outline-dark" href="/accounts/signup/">Sign Up to Pay</a>
+        {% endif %}
     </div>
 
     {% if payments %}
@@ -119,7 +130,6 @@
                     <th>Violation</th>
                     <th>Payment Method</th>
                     <th>Amount Paid</th>
-                    <th class="text-end">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -128,9 +138,6 @@
                     <td class="fw-bold">{{ payment.violation }}</td>
                     <td>{{ payment.payment_method }}</td>
                     <td>PHP {{ payment.amount_paid }}</td>
-                    <td class="text-end">
-                        <a class="btn btn-sm btn-outline-primary" href="/admin/payments/payment/{{ payment.id }}/change/">Edit</a>
-                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -139,8 +146,8 @@
     {% else %}
     <div class="empty-state">
         <h2 class="h5 fw-bold text-dark">No payments yet</h2>
-        <p>Add payments after a violation fine has been settled.</p>
-        <a class="btn btn-primary" href="/admin/payments/payment/add/">Add Payment</a>
+        <p>Payment records will appear here after fines are settled.</p>
+        <a class="btn btn-primary" href="/accounts/signup/">Sign Up to Pay</a>
     </div>
     {% endif %}
 </section>

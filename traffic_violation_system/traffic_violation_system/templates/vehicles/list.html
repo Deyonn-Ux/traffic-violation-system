@@ -6,9 +6,9 @@
 <section class="hero-panel mb-4">
     <span class="eyebrow">Vehicle Records</span>
     <h1 class="page-title h1">Vehicles</h1>
-    <p class="lead-copy mb-4">Track registered vehicles, owners, plate numbers, and model details in one place.</p>
+    <p class="lead-copy mb-4">View registered vehicle details connected to driver records.</p>
     <div class="d-flex flex-wrap gap-2">
-        <a class="btn btn-primary" href="/admin/vehicles/vehicle/add/">Add Vehicle</a>
+        <a class="btn btn-primary" href="/violations/">Check Violations</a>
         <a class="btn btn-outline-dark" href="/">Back to Dashboard</a>
     </div>
 </section>
@@ -23,7 +23,6 @@
                     <th>Driver</th>
                     <th>Type</th>
                     <th>Model</th>
-                    <th class="text-end">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -33,9 +32,6 @@
                     <td>{{ vehicle.driver }}</td>
                     <td>{{ vehicle.vehicle_type }}</td>
                     <td>{{ vehicle.model }}</td>
-                    <td class="text-end">
-                        <a class="btn btn-sm btn-outline-primary" href="/admin/vehicles/vehicle/{{ vehicle.id }}/change/">Edit</a>
-                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -43,9 +39,9 @@
     </div>
     {% else %}
     <div class="empty-state">
-        <h2 class="h5 fw-bold text-dark">No vehicles yet</h2>
-        <p>Add a vehicle record and connect it to a driver profile.</p>
-        <a class="btn btn-primary" href="/admin/vehicles/vehicle/add/">Add Vehicle</a>
+        <h2 class="h5 fw-bold text-dark">No vehicles are available</h2>
+        <p>Official vehicle records will appear here after they are added by authorized staff.</p>
+        <a class="btn btn-primary" href="/violations/">Check Violations</a>
     </div>
     {% endif %}
 </section>

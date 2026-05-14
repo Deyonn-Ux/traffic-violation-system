@@ -6,9 +6,9 @@
 <section class="hero-panel mb-4">
     <span class="eyebrow">Driver Registry</span>
     <h1 class="page-title h1">Drivers</h1>
-    <p class="lead-copy mb-4">Keep license holder details easy to scan and ready for violation tracking.</p>
+    <p class="lead-copy mb-4">View registered driver records for violation checking and payment reference.</p>
     <div class="d-flex flex-wrap gap-2">
-        <a class="btn btn-primary" href="/admin/drivers/driver/add/">Add Driver</a>
+        <a class="btn btn-primary" href="/violations/">Check Violations</a>
         <a class="btn btn-outline-dark" href="/">Back to Dashboard</a>
     </div>
 </section>
@@ -23,7 +23,6 @@
                     <th>License Number</th>
                     <th>Contact</th>
                     <th>Address</th>
-                    <th class="text-end">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -33,9 +32,6 @@
                     <td>{{ driver.license_number }}</td>
                     <td>{{ driver.contact_number }}</td>
                     <td>{{ driver.address }}</td>
-                    <td class="text-end">
-                        <a class="btn btn-sm btn-outline-primary" href="/admin/drivers/driver/{{ driver.id }}/change/">Edit</a>
-                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -43,9 +39,9 @@
     </div>
     {% else %}
     <div class="empty-state">
-        <h2 class="h5 fw-bold text-dark">No drivers yet</h2>
-        <p>Add your first driver to start connecting vehicles and violations.</p>
-        <a class="btn btn-primary" href="/admin/drivers/driver/add/">Add Driver</a>
+        <h2 class="h5 fw-bold text-dark">No drivers are available</h2>
+        <p>Official driver records will appear here after they are added by authorized staff.</p>
+        <a class="btn btn-primary" href="/violations/">Check Violations</a>
     </div>
     {% endif %}
 </section>

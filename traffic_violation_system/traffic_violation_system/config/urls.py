@@ -21,6 +21,7 @@ def dashboard(request):
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('accounts/', include('accounts.urls')),
     path('drivers/', include('drivers.urls')),
     path('vehicles/', include('vehicles.urls')),
     path('violations/', include('violations.urls')),

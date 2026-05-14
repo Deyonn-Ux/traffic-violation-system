@@ -24,7 +24,7 @@
         </div>
     </form>
     <div class="d-flex flex-wrap gap-2">
-        <a class="btn btn-primary" href="/admin/violations/violation/add/">Add Violation</a>
+        <a class="btn btn-primary" href="/payments/">Pay Fine</a>
         <a class="btn btn-outline-dark" href="/violations/">Clear Search</a>
         <a class="btn btn-outline-dark" href="/">Back to Dashboard</a>
     </div>
@@ -41,7 +41,6 @@
                     <th>Vehicle</th>
                     <th>Fine</th>
                     <th>Status</th>
-                    <th class="text-end">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -52,9 +51,6 @@
                     <td>{{ violation.vehicle }}</td>
                     <td>PHP {{ violation.fine_amount }}</td>
                     <td><span class="status-pill">{{ violation.status }}</span></td>
-                    <td class="text-end">
-                        <a class="btn btn-sm btn-outline-primary" href="/admin/violations/violation/{{ violation.id }}/change/">Edit</a>
-                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -63,8 +59,8 @@
     {% else %}
     <div class="empty-state">
         <h2 class="h5 fw-bold text-dark">No violation records found</h2>
-        <p>Try another plate or license number, or add a new violation record.</p>
-        <a class="btn btn-primary" href="/admin/violations/violation/add/">Add Violation</a>
+        <p>Try another plate or license number, or return to the dashboard.</p>
+        <a class="btn btn-primary" href="/">Back to Dashboard</a>
     </div>
     {% endif %}
 </section>
