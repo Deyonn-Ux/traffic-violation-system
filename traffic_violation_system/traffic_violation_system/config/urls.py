@@ -4,6 +4,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.shortcuts import render
+from django.views.generic import TemplateView
 from drivers.models import Driver
 from payments.models import Payment
 from vehicles.models import Vehicle
@@ -21,6 +22,11 @@ def dashboard(request):
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path(
+        'service-worker.js',
+        TemplateView.as_view(template_name='service-worker.js', content_type='application/javascript'),
+        name='service_worker',
+    ),
     path('accounts/', include('accounts.urls')),
     path('drivers/', include('drivers.urls')),
     path('vehicles/', include('vehicles.urls')),
