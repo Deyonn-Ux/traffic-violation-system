@@ -10,7 +10,7 @@ from django.utils import timezone
 from .models import Payment
 
 def payment_list(request):
-    payments = Payment.objects.select_related('violation', 'user').order_by('-created_at')
+    payments = Payment.objects.select_related('user').order_by('-created_at')
     return render(request, 'payments/list.html', {'payments': payments})
 
 
