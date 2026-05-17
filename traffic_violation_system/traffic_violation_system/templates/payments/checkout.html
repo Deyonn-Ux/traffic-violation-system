@@ -120,6 +120,10 @@
                     <span>Date Submitted</span>
                     <strong>{{ receipt.created_at|date:"M d, Y H:i:s" }}</strong>
                 </div>
+                <div class="d-flex flex-wrap gap-2 mt-3">
+                    <a class="btn btn-primary" href="{% url 'download_pdf_receipt' receipt.id %}">Download PDF Receipt</a>
+                    <a class="btn btn-outline-dark" href="/payments/">Back to Payment Methods</a>
+                </div>
                 {% endif %}
                 <p class="text-muted small mb-0 mt-3">Keep this temporary receipt and compare it with the official receipt from the payment provider or cashier.</p>
             </aside>

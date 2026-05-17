@@ -2,11 +2,12 @@ const CACHE_NAME = 'traffic-violation-system-v1';
 const APP_SHELL = [
     '/',
     '/payments/',
-    '/vehicles/',
     '/violations/',
     '/drivers/',
+    '/vehicles/',
+    '/offline/',
     '/static/manifest.json',
-    '/static/icons/icon.svg'
+    '/static/icons/icon.svg',
 ];
 
 self.addEventListener('install', (event) => {
@@ -30,13 +31,42 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
+    const requestUrl = new URL(event.request.url);
+    const isNavigation = event.request.mode === 'navigate' || (event.request.headers.get('accept') || '').includes('text/html');
+
+    if (isNavigation) {
+        event.respondWith(
+            fetch(event.request)
+                .then((response) => {
+                    const copy = response.clone();
+                    caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+                    return response;
+                })
+                .catch(() => caches.match(event.request).then((cached) => cached || caches.match('/offline/')))
+        );
+        return;
+    }
+
     event.respondWith(
-        fetch(event.request)
-            .then((response) => {
-                const clone = response.clone();
-                caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
-                return response;
-            })
-            .catch(() => caches.match(event.request).then((cached) => cached || caches.match('/')))
+        caches.match(event.request).then((cached) => {
+            if (cached) {
+                return cached;
+            }
+
+            return fetch(event.request)
+                .then((response) => {
+                    if (!response || response.status !== 200 || response.type !== 'basic') {
+                        return response;
+                    }
+                    const clone = response.clone();
+                    caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+                    return response;
+                })
+                .catch(() => {
+                    if (event.request.destination === 'image') {
+                        return caches.match('/static/icons/icon.svg');
+                    }
+                });
+        })
     );
 });

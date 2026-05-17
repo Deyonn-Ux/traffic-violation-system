@@ -16,6 +16,7 @@ urlpatterns = [
                 'login_header': 'Staff Login',
                 'login_title': 'Staff Login Required',
                 'login_message': 'Use your staff account to monitor system activity and manage payments.',
+                'staff_login': True,
             },
         ),
         name='staff_login',

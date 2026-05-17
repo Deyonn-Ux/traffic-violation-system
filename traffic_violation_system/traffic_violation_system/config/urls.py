@@ -32,5 +32,6 @@ urlpatterns = [
     path('vehicles/', include('vehicles.urls')),
     path('violations/', include('violations.urls')),
     path('payments/', include('payments.urls')),
+    path('offline/', TemplateView.as_view(template_name='offline.html'), name='offline'),
     path('', dashboard, name='dashboard'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

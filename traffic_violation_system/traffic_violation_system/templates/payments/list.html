@@ -133,6 +133,7 @@
                     <th>Payment Method</th>
                     <th>Amount Paid</th>
                     <th>Status</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -144,6 +145,11 @@
                     <td>{{ payment.payment_method }}</td>
                     <td>PHP {{ payment.amount_paid }}</td>
                     <td><span class="status-pill">{{ payment.get_status_display }}</span></td>
+                    <td>
+                        {% if user.is_authenticated and (payment.user == user or user.is_staff) %}
+                        <a class="btn btn-sm btn-outline-primary" href="{% url 'download_pdf_receipt' payment.id %}">Download PDF</a>
+                        {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

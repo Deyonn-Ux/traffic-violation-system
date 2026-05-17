@@ -24,6 +24,8 @@
         <button class="btn btn-primary w-100" type="submit">Login</button>
     </form>
 
+    {% if not staff_login %}
     <p class="text-muted text-center mt-3 mb-0">Need an account? <a href="/accounts/signup/">Sign up</a></p>
+    {% endif %}
 </section>
 {% endblock %}
