@@ -11,7 +11,15 @@ from .models import Payment
 
 def payment_list(request):
     payments = Payment.objects.select_related('user').order_by('-created_at')
-    return render(request, 'payments/list.html', {'payments': payments})
+
+    if request.user.is_staff:
+        visible_payments = payments
+    elif request.user.is_authenticated:
+        visible_payments = payments.filter(user=request.user)
+    else:
+        visible_payments = Payment.objects.none()
+
+    return render(request, 'payments/list.html', {'payments': visible_payments})
 
 
 @login_required
