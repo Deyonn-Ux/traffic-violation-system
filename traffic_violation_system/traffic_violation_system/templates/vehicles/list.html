@@ -28,8 +28,8 @@
             <tbody>
                 {% for vehicle in vehicles %}
                 <tr>
-                    <td class="fw-bold">{{ vehicle.plate_number }}</td>
-                    <td>{{ vehicle.driver }}</td>
+                    <td class="fw-bold">{{ vehicle.display_plate }}</td>
+                    <td>{{ vehicle.display_driver }}</td>
                     <td>{{ vehicle.vehicle_type }}</td>
                     <td>{{ vehicle.model }}</td>
                 </tr>

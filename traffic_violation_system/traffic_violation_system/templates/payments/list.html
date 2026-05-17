@@ -5,6 +5,15 @@
 {% block content %}
 <section class="hero-panel mb-4">
     <span class="eyebrow">Collections</span>
+    {% if user.is_authenticated and user.is_staff %}
+    <h1 class="page-title h1">Payment Records</h1>
+    <p class="lead-copy mb-4">Review all submitted fine payments and verify offender payment status.</p>
+    <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-primary" href="#payment-records">View Recent Records</a>
+        <a class="btn btn-outline-dark" href="/accounts/staff-portal/">Staff Portal</a>
+        <a class="btn btn-outline-dark" href="/">Back to Dashboard</a>
+    </div>
+    {% else %}
     <h1 class="page-title h1">Pay My Fine</h1>
     <p class="lead-copy mb-4">Choose an official payment channel, then record the settled violation in the system.</p>
     <div class="d-flex flex-wrap gap-2">
@@ -12,8 +21,10 @@
         <a class="btn btn-outline-dark" href="#payment-records">View Payment Records</a>
         <a class="btn btn-outline-dark" href="/">Back to Dashboard</a>
     </div>
+    {% endif %}
 </section>
 
+{% if not user.is_staff %}
 <section class="content-panel mb-4" id="payment-methods">
     <div class="text-center mb-4">
         <div class="d-flex align-items-center gap-3 justify-content-center mb-2">
@@ -110,12 +121,17 @@
         </div>
     </div>
 </section>
+{% endif %}
 
 <section class="content-panel" id="payment-records">
     <div class="d-flex flex-column flex-md-row justify-content-between gap-2 align-items-md-center mb-3">
         <div>
             <span class="eyebrow">Payment History</span>
-            <h2 class="h4 fw-bold mb-0">Payment Records</h2>
+            {% if user.is_authenticated and user.is_staff %}
+            <h2 class="h4 fw-bold mb-0">All Recent Payment Records</h2>
+            {% else %}
+            <h2 class="h4 fw-bold mb-0">My Payment Records</h2>
+            {% endif %}
         </div>
         {% if not user.is_authenticated %}
         <a class="btn btn-outline-dark" href="/accounts/signup/">Sign Up to Pay</a>
@@ -159,16 +175,17 @@
     </div>
     {% else %}
     <div class="empty-state">
-        {% if user.is_authenticated %}
+        {% if user.is_authenticated and user.is_staff %}
+        <h2 class="h5 fw-bold text-dark">No payment records yet</h2>
+        <p>All offender payment submissions will appear here once users submit fine payments.</p>
+        <a class="btn btn-primary" href="/accounts/staff-portal/">Staff Portal</a>
+        {% elif user.is_authenticated %}
         <h2 class="h5 fw-bold text-dark">No payment records yet</h2>
         <p>Your payment records will appear here after you submit a fine payment.</p>
+        <a class="btn btn-primary" href="/payments/checkout/">Pay a Fine</a>
         {% else %}
         <h2 class="h5 fw-bold text-dark">Login required for payment records</h2>
         <p>For privacy, payment records are only visible to the account that submitted them.</p>
-        {% endif %}
-        {% if user.is_authenticated %}
-        <a class="btn btn-primary" href="/payments/checkout/">Pay a Fine</a>
-        {% else %}
         <a class="btn btn-primary" href="/accounts/login/">Login</a>
         <a class="btn btn-outline-dark" href="/accounts/signup/">Sign Up</a>
         {% endif %}

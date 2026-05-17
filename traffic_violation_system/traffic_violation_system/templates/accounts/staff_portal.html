@@ -66,6 +66,94 @@
     </div>
 </section>
 
+<section class="content-panel mb-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between gap-2 align-items-md-center mb-3">
+        <div>
+            <span class="eyebrow">Recent Offender Records</span>
+            <h2 class="h4 fw-bold mb-0">Latest Violation Cases</h2>
+        </div>
+        <a class="btn btn-outline-dark" href="/violations/">All Violations</a>
+    </div>
+
+    {% if recent_violations %}
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Driver</th>
+                    <th>License</th>
+                    <th>Vehicle</th>
+                    <th>Violation</th>
+                    <th>Fine</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for violation in recent_violations %}
+                <tr>
+                    <td class="fw-bold">{{ violation.driver.first_name }} {{ violation.driver.last_name }}</td>
+                    <td>{{ violation.driver.license_number }}</td>
+                    <td>{{ violation.vehicle.plate_number }}</td>
+                    <td>{{ violation.violation_type }}</td>
+                    <td>PHP {{ violation.fine_amount }}</td>
+                    <td><span class="status-pill">{{ violation.status }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <h2 class="h5 fw-bold text-dark">No violation records yet</h2>
+        <p>Recent offender records appear after violations are added.</p>
+    </div>
+    {% endif %}
+</section>
+
+<section class="content-panel mb-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between gap-2 align-items-md-center mb-3">
+        <div>
+            <span class="eyebrow">Recent Payments</span>
+            <h2 class="h4 fw-bold mb-0">Latest Fine Payment Submissions</h2>
+        </div>
+        <a class="btn btn-outline-dark" href="/payments/">All Payments</a>
+    </div>
+
+    {% if recent_payments %}
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Receipt</th>
+                    <th>User</th>
+                    <th>Ticket</th>
+                    <th>Plate</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for payment in recent_payments %}
+                <tr>
+                    <td class="fw-bold">{{ payment.receipt_number }}</td>
+                    <td>{{ payment.user }}</td>
+                    <td>{{ payment.ticket_number }}</td>
+                    <td>{{ payment.plate_number }}</td>
+                    <td>PHP {{ payment.amount_paid }}</td>
+                    <td><span class="status-pill">{{ payment.get_status_display }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <h2 class="h5 fw-bold text-dark">No payment submissions yet</h2>
+        <p>Recent payment records appear after users submit fine payments.</p>
+    </div>
+    {% endif %}
+</section>
+
 <section class="content-panel">
     <div class="d-flex flex-column flex-md-row justify-content-between gap-2 align-items-md-center mb-3">
         <div>

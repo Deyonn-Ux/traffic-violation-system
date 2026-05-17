@@ -24,7 +24,11 @@
         </div>
     </form>
     <div class="d-flex flex-wrap gap-2">
+        {% if user.is_authenticated and user.is_staff %}
+        <a class="btn btn-primary" href="/accounts/staff-portal/">Staff Portal</a>
+        {% else %}
         <a class="btn btn-primary" href="/payments/">Pay Fine</a>
+        {% endif %}
         <a class="btn btn-outline-dark" href="/violations/">Clear Search</a>
         <a class="btn btn-outline-dark" href="/">Back to Dashboard</a>
     </div>
@@ -47,7 +51,7 @@
                 {% for violation in violations %}
                 <tr>
                     <td class="fw-bold">{{ violation.violation_type }}</td>
-                    <td>{{ violation.driver }}</td>
+                    <td>{{ violation.display_driver }}</td>
                     <td>{{ violation.vehicle }}</td>
                     <td>PHP {{ violation.fine_amount }}</td>
                     <td><span class="status-pill">{{ violation.status }}</span></td>

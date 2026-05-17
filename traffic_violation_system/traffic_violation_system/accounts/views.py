@@ -75,5 +75,7 @@ def staff_portal(request):
         'pending_payments': Payment.objects.filter(status='pending').count(),
         'paid_payments': Payment.objects.filter(status='paid').count(),
         'repeat_offenders': repeat_offenders,
+        'recent_violations': Violation.objects.select_related('driver', 'vehicle').order_by('-id')[:15],
+        'recent_payments': Payment.objects.select_related('user').order_by('-created_at')[:15],
     }
     return render(request, 'accounts/staff_portal.html', context)

@@ -30,8 +30,8 @@
             <tbody>
                 {% for driver in drivers %}
                 <tr>
-                    <td class="fw-bold">{{ driver.first_name }} {{ driver.last_name }}</td>
-                    <td>{{ driver.license_number }}</td>
+                    <td class="fw-bold">{{ driver.display_name }}</td>
+                    <td>{{ driver.display_license }}</td>
                     <td>{{ driver.violation_count }}</td>
                     <td>
                         {% if driver.violation_count|default:0 >= 2 %}
@@ -40,8 +40,8 @@
                         <span class="text-muted">No</span>
                         {% endif %}
                     </td>
-                    <td>{{ driver.contact_number }}</td>
-                    <td>{{ driver.address }}</td>
+                    <td>{{ driver.display_contact }}</td>
+                    <td>{{ driver.display_address }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
