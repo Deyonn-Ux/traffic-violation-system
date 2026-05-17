@@ -21,6 +21,8 @@
                 <tr>
                     <th>Name</th>
                     <th>License Number</th>
+                    <th>Violations</th>
+                    <th>Repeat Offender</th>
                     <th>Contact</th>
                     <th>Address</th>
                 </tr>
@@ -30,6 +32,14 @@
                 <tr>
                     <td class="fw-bold">{{ driver.first_name }} {{ driver.last_name }}</td>
                     <td>{{ driver.license_number }}</td>
+                    <td>{{ driver.violation_count }}</td>
+                    <td>
+                        {% if driver.violation_count|default:0 >= 2 %}
+                        <span class="status-pill">Repeat Offender</span>
+                        {% else %}
+                        <span class="text-muted">No</span>
+                        {% endif %}
+                    </td>
                     <td>{{ driver.contact_number }}</td>
                     <td>{{ driver.address }}</td>
                 </tr>

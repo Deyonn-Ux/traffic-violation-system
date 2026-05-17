@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %}Staff Portal | Traffic Violation System{% endblock %}
+
+{% block content %}
+<section class="hero-panel mb-4">
+    <span class="eyebrow">Staff Portal</span>
+    <h1 class="page-title h1">System Monitoring</h1>
+    <p class="lead-copy mb-4">Review violation records, payment status, and repeat offender alerts.</p>
+    <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-primary" href="/admin/">Open Admin Console</a>
+        <a class="btn btn-outline-dark" href="/violations/">View Violations</a>
+        <a class="btn btn-outline-dark" href="/payments/">View Payments</a>
+    </div>
+</section>
+
+<section class="content-panel mb-4">
+    <div class="row g-3">
+        <div class="col-sm-6 col-xl-3">
+            <div class="stat-card">
+                <div class="stat-value">{{ total_drivers }}</div>
+                <div class="stat-label mt-2">Drivers</div>
+                <span class="small text-muted">Registered driver records</span>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="stat-card">
+                <div class="stat-value">{{ total_vehicles }}</div>
+                <div class="stat-label mt-2">Vehicles</div>
+                <span class="small text-muted">Vehicle records</span>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="stat-card">
+                <div class="stat-value">{{ total_violations }}</div>
+                <div class="stat-label mt-2">Violations</div>
+                <span class="small text-muted">Total violation cases</span>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="stat-card">
+                <div class="stat-value">{{ total_payments }}</div>
+                <div class="stat-label mt-2">Payments</div>
+                <span class="small text-muted">Payment records</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content-panel mb-4">
+    <div class="row g-3">
+        <div class="col-md-6">
+            <div class="stat-card">
+                <div class="stat-value">{{ pending_payments }}</div>
+                <div class="stat-label mt-2">Pending Payments</div>
+                <span class="small text-muted">Awaiting verification</span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="stat-card">
+                <div class="stat-value">{{ paid_payments }}</div>
+                <div class="stat-label mt-2">Verified Payments</div>
+                <span class="small text-muted">Settled fines</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content-panel">
+    <div class="d-flex flex-column flex-md-row justify-content-between gap-2 align-items-md-center mb-3">
+        <div>
+            <span class="eyebrow">Repeat Offenders</span>
+            <h2 class="h4 fw-bold mb-0">Flagged Drivers</h2>
+        </div>
+        <a class="btn btn-outline-dark" href="/drivers/">Driver Records</a>
+    </div>
+
+    {% if repeat_offenders %}
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>License</th>
+                    <th>Violations</th>
+                    <th>Contact</th>
+                    <th>Address</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for driver in repeat_offenders %}
+                <tr>
+                    <td class="fw-bold">{{ driver.first_name }} {{ driver.last_name }}</td>
+                    <td>{{ driver.license_number }}</td>
+                    <td>{{ driver.violation_count }}</td>
+                    <td>{{ driver.contact_number }}</td>
+                    <td>{{ driver.address }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <h2 class="h5 fw-bold text-dark">No repeat offenders found</h2>
+        <p>Repeat offender alerts appear once a driver has two or more recorded violations.</p>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

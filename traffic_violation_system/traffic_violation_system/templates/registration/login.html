@@ -4,9 +4,9 @@
 
 {% block content %}
 <section class="content-panel auth-panel">
-    <span class="eyebrow">User Login</span>
-    <h1 class="h3 fw-bold mb-2">Login to continue</h1>
-    <p class="text-muted mb-4">Access payment services using your public account.</p>
+    <span class="eyebrow">{{ login_header|default:'User Login' }}</span>
+    <h1 class="h3 fw-bold mb-2">{{ login_title|default:'Login to continue' }}</h1>
+    <p class="text-muted mb-4">{{ login_message|default:'Access payment services using your public account.' }}</p>
 
     <form method="post">
         {% csrf_token %}

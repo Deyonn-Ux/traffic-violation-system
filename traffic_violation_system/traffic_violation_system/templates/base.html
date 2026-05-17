@@ -460,6 +460,11 @@
                     <a class="nav-link" href="/payments/">Pay Fine</a>
                     <a class="nav-link" href="/vehicles/">Vehicle Portal</a>
                     <a class="nav-link" href="/drivers/">Drivers</a>
+                    {% if user.is_authenticated and user.is_staff %}
+                    <a class="nav-link" href="/accounts/staff-portal/">Staff Portal</a>
+                    {% elif not user.is_authenticated %}
+                    <a class="nav-link" href="/accounts/staff-login/">Staff Login</a>
+                    {% endif %}
                     {% if user.is_authenticated %}
                     <a class="nav-link" href="/accounts/settings/">Settings</a>
                     <form action="/accounts/logout/" method="post" class="d-inline">
@@ -479,12 +484,15 @@
     <div class="notice-bar">
         <div class="container d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2">
             <span>Check violations, view vehicle records, and pay fines using one public account.</span>
-            {% if user.is_authenticated %}
+            {% if user.is_authenticated and user.is_staff %}
+            <a class="btn btn-warning btn-sm" href="/accounts/staff-portal/">Staff Portal</a>
+            {% elif user.is_authenticated %}
             <a class="btn btn-warning btn-sm" href="/accounts/settings/">Account Settings</a>
             {% else %}
             <div class="d-flex flex-wrap gap-2">
                 <button class="btn btn-warning btn-sm install-app-btn" id="installAppButton" type="button">Install App</button>
                 <a class="btn btn-warning btn-sm" href="/accounts/signup/">Create Account</a>
+                <a class="btn btn-warning btn-sm" href="/accounts/staff-login/">Staff Login</a>
             </div>
             {% endif %}
         </div>
