@@ -146,7 +146,9 @@
                     <td>PHP {{ payment.amount_paid }}</td>
                     <td><span class="status-pill">{{ payment.get_status_display }}</span></td>
                     <td>
-                        {% if user.is_authenticated and (payment.user == user or user.is_staff) %}
+                        {% if user.is_staff %}
+                        <a class="btn btn-sm btn-outline-primary" href="{% url 'download_pdf_receipt' payment.id %}">Download PDF</a>
+                        {% elif user.is_authenticated and payment.user == user %}
                         <a class="btn btn-sm btn-outline-primary" href="{% url 'download_pdf_receipt' payment.id %}">Download PDF</a>
                         {% endif %}
                     </td>
