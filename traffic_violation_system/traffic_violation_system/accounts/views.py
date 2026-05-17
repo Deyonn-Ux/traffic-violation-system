@@ -1,6 +1,6 @@
+from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Count
 from django.shortcuts import redirect, render
 
@@ -8,24 +8,55 @@ from drivers.models import Driver
 from payments.models import Payment
 from vehicles.models import Vehicle
 from violations.models import Violation
+from .forms import SignUpForm, UpdateEmailForm, UpdateMobileForm
 
 
 def signup(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
             return redirect('payment_list')
     else:
-        form = UserCreationForm()
+        form = SignUpForm()
 
     return render(request, 'registration/signup.html', {'form': form})
 
 
 @login_required
 def account_settings(request):
-    return render(request, 'accounts/settings.html')
+    mobile_number = request.session.get('mobile_number')
+    return render(request, 'accounts/settings.html', {'mobile_number': mobile_number})
+
+
+@login_required
+def update_email(request):
+    if request.method == 'POST':
+        form = UpdateEmailForm(request.POST)
+        if form.is_valid():
+            request.user.email = form.cleaned_data['email']
+            request.user.save()
+            messages.success(request, 'Email address updated successfully.')
+            return redirect('account_settings')
+    else:
+        form = UpdateEmailForm(initial={'email': request.user.email})
+
+    return render(request, 'accounts/update_email.html', {'form': form})
+
+
+@login_required
+def update_mobile(request):
+    if request.method == 'POST':
+        form = UpdateMobileForm(request.POST)
+        if form.is_valid():
+            request.session['mobile_number'] = form.cleaned_data['mobile_number']
+            messages.success(request, 'Mobile number saved for this browser session.')
+            return redirect('account_settings')
+    else:
+        form = UpdateMobileForm(initial={'mobile_number': request.session.get('mobile_number', '')})
+
+    return render(request, 'accounts/update_mobile.html', {'form': form})
 
 
 @login_required
