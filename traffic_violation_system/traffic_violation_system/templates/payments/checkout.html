@@ -18,8 +18,9 @@
 
             <form id="receiptForm" method="post">
                 {% csrf_token %}
+                <input type="hidden" name="payment_channel" value="{{ payment_channel }}">
                 <div class="mb-3">
-                    <label class="form-label fw-bold">Payment Channel</label>
+                    <label class="form-label fw-bold">{{ payment_channel_label }} Choices</label>
                     <div class="payment-method-grid">
                         {% for method in payment_methods %}
                         <label class="checkout-method">
@@ -55,7 +56,7 @@
 
                 <div class="d-flex flex-wrap gap-2">
                     <button class="btn btn-primary px-4" type="submit">Submit Payment for Verification</button>
-                    <a class="btn btn-outline-dark" href="/payments/">Back to Payment Methods</a>
+                    <a class="btn btn-outline-dark" href="/payments/#payment-methods">Back to Payment Methods</a>
                 </div>
             </form>
         </div>
@@ -86,8 +87,8 @@
                     <strong id="receiptViolation">{% if receipt %}{{ receipt.violation_type }}{% else %}Not entered{% endif %}</strong>
                 </div>
                 <div class="receipt-line">
-                    <span>Channel</span>
-                    <strong id="receiptMethod">{% if receipt %}{{ receipt.payment_method }}{% else %}GCash{% endif %}</strong>
+                    <span>Method</span>
+                    <strong id="receiptMethod">{% if receipt %}{{ receipt.payment_method }}{% else %}{{ default_payment_method }}{% endif %}</strong>
                 </div>
                 <div class="receipt-total">
                     <span>Amount</span>

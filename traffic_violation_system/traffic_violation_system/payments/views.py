@@ -11,7 +11,20 @@ from django.utils import timezone
 
 from .models import Payment, TicketReference
 
-IN_APP_PAYMENT_METHODS = ('GCash', 'Maya', 'Visa')
+PAYMENT_METHOD_GROUPS = {
+    'in_app': {
+        'label': 'In-App Payment',
+        'methods': ('GCash', 'Maya', 'Visa'),
+    },
+    'digital': {
+        'label': 'Digital Payment',
+        'methods': ('Bank App', 'E-Wallet', 'QR Transfer'),
+    },
+    'counter': {
+        'label': 'Over-the-Counter',
+        'methods': ('Cash', 'Payment Center', 'LTO Cashier'),
+    },
+}
 
 
 def normalize_plate(value):
@@ -35,19 +48,25 @@ def payment_list(request):
 def payment_checkout(request):
     receipt = None
     form_data = {}
+    selected_channel = request.GET.get('channel', 'in_app')
 
     if request.method == 'POST':
         form_data = request.POST
-        payment_method = request.POST.get('payment_method', 'GCash')
+        selected_channel = request.POST.get('payment_channel', 'in_app')
+        method_group = PAYMENT_METHOD_GROUPS.get(selected_channel, PAYMENT_METHOD_GROUPS['in_app'])
+        payment_method = request.POST.get('payment_method', method_group['methods'][0])
         ticket_number = request.POST.get('ticket_number', '').strip().upper()
         plate_number = request.POST.get('plate_number', '').strip().upper()
 
-        if payment_method not in IN_APP_PAYMENT_METHODS:
-            messages.error(request, 'Please choose a valid in-app payment channel: GCash, Maya, or Visa.')
+        if payment_method not in method_group['methods']:
+            messages.error(request, f'Please choose a valid {method_group["label"].lower()} option.')
             return render(request, 'payments/checkout.html', {
                 'receipt': receipt,
                 'form_data': form_data,
-                'payment_methods': IN_APP_PAYMENT_METHODS,
+                'payment_channel': selected_channel,
+                'payment_channel_label': method_group['label'],
+                'payment_methods': method_group['methods'],
+                'default_payment_method': method_group['methods'][0],
             })
 
         ticket_reference = (
@@ -62,7 +81,10 @@ def payment_checkout(request):
             return render(request, 'payments/checkout.html', {
                 'receipt': receipt,
                 'form_data': form_data,
-                'payment_methods': IN_APP_PAYMENT_METHODS,
+                'payment_channel': selected_channel,
+                'payment_channel_label': method_group['label'],
+                'payment_methods': method_group['methods'],
+                'default_payment_method': method_group['methods'][0],
             })
 
         existing_payment = Payment.objects.filter(
@@ -74,7 +96,10 @@ def payment_checkout(request):
             return render(request, 'payments/checkout.html', {
                 'receipt': receipt,
                 'form_data': form_data,
-                'payment_methods': IN_APP_PAYMENT_METHODS,
+                'payment_channel': selected_channel,
+                'payment_channel_label': method_group['label'],
+                'payment_methods': method_group['methods'],
+                'default_payment_method': method_group['methods'][0],
             })
 
         violation = ticket_reference.violation
@@ -93,10 +118,15 @@ def payment_checkout(request):
         )
         messages.success(request, 'Temporary receipt created. Your payment is pending admin verification.')
 
+    method_group = PAYMENT_METHOD_GROUPS.get(selected_channel, PAYMENT_METHOD_GROUPS['in_app'])
+
     return render(request, 'payments/checkout.html', {
         'receipt': receipt,
         'form_data': form_data,
-        'payment_methods': IN_APP_PAYMENT_METHODS,
+        'payment_channel': selected_channel,
+        'payment_channel_label': method_group['label'],
+        'payment_methods': method_group['methods'],
+        'default_payment_method': method_group['methods'][0],
     })
 
 
