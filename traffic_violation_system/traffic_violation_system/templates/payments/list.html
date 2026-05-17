@@ -15,7 +15,7 @@
     </div>
     {% else %}
     <h1 class="page-title h1">Pay My Fine</h1>
-    <p class="lead-copy mb-4">Choose an official payment channel, then record the settled violation in the system.</p>
+    <p class="lead-copy mb-4">Choose an official in-app payment channel, then submit the matched ticket for verification.</p>
     <div class="d-flex flex-wrap gap-2">
         <a class="btn btn-primary" href="#payment-methods">Select Payment Method</a>
         <a class="btn btn-outline-dark" href="#payment-records">View Payment Records</a>
@@ -32,7 +32,7 @@
             <h2 class="h1 fw-bold mb-0">SELECT PAYMENT METHOD</h2>
             <span class="flex-grow-1 border-top"></span>
         </div>
-        <p class="text-muted mb-0">Choose your preferred official payment channel.</p>
+        <p class="text-muted mb-0">Choose your preferred official in-app payment channel.</p>
     </div>
 
     <div class="row g-3 align-items-start">
@@ -53,54 +53,9 @@
                         <span>Maya</span>
                         <span>Visa</span>
                     </div>
-                    <p class="text-muted mt-3 mb-3">Your payment is encrypted and securely processed.</p>
+                    <p class="text-muted mt-3 mb-3">Your ticket/reference number and plate number will be checked against the official violation record.</p>
                     {% if user.is_authenticated %}
                     <a class="btn btn-primary px-5" href="/payments/checkout/">Proceed to Payment</a>
-                    {% else %}
-                    <a class="btn btn-primary px-5" href="/accounts/signup/">Sign Up to Pay</a>
-                    {% endif %}
-                </div>
-            </div>
-
-            <div class="payment-option" data-payment-option>
-                <div class="payment-option-head">
-                    <input class="form-check-input" type="radio" name="payment_method_choice">
-                    <div class="payment-icon payment-icon-red">D</div>
-                    <div class="flex-grow-1">
-                        <h3 class="h5 fw-bold mb-1">Digital Payment</h3>
-                        <p class="text-muted mb-0">Pay through partner apps after entering your ticket reference.</p>
-                    </div>
-                    <button class="btn btn-sm btn-link text-dark text-decoration-none" type="button" data-payment-toggle>Show</button>
-                </div>
-                <div class="payment-option-body d-none">
-                    <div class="payment-logos">
-                        <span>Bank App</span>
-                        <span>E-Wallet</span>
-                        <span>QR Transfer</span>
-                    </div>
-                    <p class="text-muted mt-3 mb-3">Use the ticket number issued by the enforcer or shown in the violation search result.</p>
-                    {% if user.is_authenticated %}
-                    <a class="btn btn-primary px-5" href="/payments/checkout/">Continue Digital Payment</a>
-                    {% else %}
-                    <a class="btn btn-primary px-5" href="/accounts/signup/">Sign Up to Pay</a>
-                    {% endif %}
-                </div>
-            </div>
-
-            <div class="payment-option" data-payment-option>
-                <div class="payment-option-head">
-                    <input class="form-check-input" type="radio" name="payment_method_choice">
-                    <div class="payment-icon payment-icon-gold">O</div>
-                    <div class="flex-grow-1">
-                        <h3 class="h5 fw-bold mb-1">Over-the-Counter</h3>
-                        <p class="text-muted mb-0">Settle the fine at an authorized office or payment center.</p>
-                    </div>
-                    <button class="btn btn-sm btn-link text-dark text-decoration-none" type="button" data-payment-toggle>Show</button>
-                </div>
-                <div class="payment-option-body d-none">
-                    <p class="text-muted mb-3">Bring your ticket/reference number and keep the official receipt until the violation status is updated.</p>
-                    {% if user.is_authenticated %}
-                    <a class="btn btn-primary px-5" href="/payments/checkout/">Prepare Counter Receipt</a>
                     {% else %}
                     <a class="btn btn-primary px-5" href="/accounts/signup/">Sign Up to Pay</a>
                     {% endif %}
@@ -114,7 +69,7 @@
                 <p class="text-muted">Faster, safer, official.</p>
                 <div class="benefit-item"><span>Fast</span> Faster Processing</div>
                 <div class="benefit-item"><span>Lock</span> Secure Payment</div>
-                <div class="benefit-item"><span>OK</span> Online and counter channels</div>
+                <div class="benefit-item"><span>OK</span> Ticket and plate validation</div>
                 <div class="benefit-item"><span>Easy</span> Less Hassle</div>
                 <p class="text-muted mb-0 mt-4">Retain your receipt until your status is updated.</p>
             </aside>

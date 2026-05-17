@@ -1,13 +1,22 @@
 
 from io import BytesIO
+import re
 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
 
-from .models import Payment
+from .models import Payment, TicketReference
+
+IN_APP_PAYMENT_METHODS = ('GCash', 'Maya', 'Visa')
+
+
+def normalize_plate(value):
+    return re.sub(r'[^A-Z0-9]', '', value.upper())
+
 
 def payment_list(request):
     payments = Payment.objects.select_related('user').order_by('-created_at')
@@ -25,22 +34,70 @@ def payment_list(request):
 @login_required
 def payment_checkout(request):
     receipt = None
+    form_data = {}
 
     if request.method == 'POST':
+        form_data = request.POST
+        payment_method = request.POST.get('payment_method', 'GCash')
+        ticket_number = request.POST.get('ticket_number', '').strip().upper()
+        plate_number = request.POST.get('plate_number', '').strip().upper()
+
+        if payment_method not in IN_APP_PAYMENT_METHODS:
+            messages.error(request, 'Please choose a valid in-app payment channel: GCash, Maya, or Visa.')
+            return render(request, 'payments/checkout.html', {
+                'receipt': receipt,
+                'form_data': form_data,
+                'payment_methods': IN_APP_PAYMENT_METHODS,
+            })
+
+        ticket_reference = (
+            TicketReference.objects
+            .select_related('violation__vehicle')
+            .filter(reference_number=ticket_number, is_active=True)
+            .first()
+        )
+
+        if not ticket_reference or normalize_plate(ticket_reference.violation.vehicle.plate_number) != normalize_plate(plate_number):
+            messages.error(request, 'The ticket/reference number does not match that plate number. Please check the ticket issued by the enforcer.')
+            return render(request, 'payments/checkout.html', {
+                'receipt': receipt,
+                'form_data': form_data,
+                'payment_methods': IN_APP_PAYMENT_METHODS,
+            })
+
+        existing_payment = Payment.objects.filter(
+            Q(ticket_reference=ticket_reference) | Q(ticket_number=ticket_reference.reference_number),
+            status__in=('pending', 'paid'),
+        ).first()
+        if existing_payment:
+            messages.error(request, f'This ticket reference already has a {existing_payment.get_status_display().lower()} payment record.')
+            return render(request, 'payments/checkout.html', {
+                'receipt': receipt,
+                'form_data': form_data,
+                'payment_methods': IN_APP_PAYMENT_METHODS,
+            })
+
+        violation = ticket_reference.violation
         timestamp = timezone.now().strftime('%Y%m%d%H%M%S%f')[:-3]
         receipt = Payment.objects.create(
             user=request.user,
-            ticket_number=request.POST.get('ticket_number', '').strip(),
-            plate_number=request.POST.get('plate_number', '').strip(),
-            violation_type=request.POST.get('violation_type', '').strip(),
-            payment_method=request.POST.get('payment_method', 'GCash'),
-            amount_paid=request.POST.get('amount_paid') or 0,
+            violation=violation,
+            ticket_reference=ticket_reference,
+            ticket_number=ticket_reference.reference_number,
+            plate_number=violation.vehicle.plate_number,
+            violation_type=violation.violation_type,
+            payment_method=payment_method,
+            amount_paid=violation.fine_amount,
             receipt_number=f'TVS-{timestamp}',
             status='pending',
         )
         messages.success(request, 'Temporary receipt created. Your payment is pending admin verification.')
 
-    return render(request, 'payments/checkout.html', {'receipt': receipt})
+    return render(request, 'payments/checkout.html', {
+        'receipt': receipt,
+        'form_data': form_data,
+        'payment_methods': IN_APP_PAYMENT_METHODS,
+    })
 
 
 @login_required

@@ -8,11 +8,11 @@
         <div class="col-lg-7">
             <span class="eyebrow">Payment Checkout</span>
             <h1 class="h3 fw-bold mb-2">Pay using your ticket details</h1>
-            <p class="text-muted mb-4">A ticket/reference number is issued by the traffic enforcer, LTO office, or violation search result. Use that number to pay the correct fine.</p>
+            <p class="text-muted mb-4">Enter the ticket/reference number issued by the traffic enforcer and the matching plate number. The system will use the official violation record for the fine details.</p>
 
             {% if messages %}
             {% for message in messages %}
-            <div class="alert alert-success">{{ message }}</div>
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags|default:'info' }}{% endif %}">{{ message }}</div>
             {% endfor %}
             {% endif %}
 
@@ -21,58 +21,36 @@
                 <div class="mb-3">
                     <label class="form-label fw-bold">Payment Channel</label>
                     <div class="payment-method-grid">
+                        {% for method in payment_methods %}
                         <label class="checkout-method">
-                            <input type="radio" name="payment_method" value="GCash" checked>
-                            <span>GCash</span>
+                            <input type="radio" name="payment_method" value="{{ method }}" {% if form_data.payment_method == method or not form_data.payment_method and forloop.first %}checked{% endif %}>
+                            <span>{{ method }}</span>
                         </label>
-                        <label class="checkout-method">
-                            <input type="radio" name="payment_method" value="Maya">
-                            <span>Maya</span>
-                        </label>
-                        <label class="checkout-method">
-                            <input type="radio" name="payment_method" value="Visa">
-                            <span>Visa</span>
-                        </label>
-                        <label class="checkout-method">
-                            <input type="radio" name="payment_method" value="Digital Payment">
-                            <span>Digital</span>
-                        </label>
-                        <label class="checkout-method">
-                            <input type="radio" name="payment_method" value="Card">
-                            <span>Card</span>
-                        </label>
-                        <label class="checkout-method">
-                            <input type="radio" name="payment_method" value="Cash">
-                            <span>Cash</span>
-                        </label>
-                        <label class="checkout-method">
-                            <input type="radio" name="payment_method" value="Over-the-Counter">
-                            <span>Counter</span>
-                        </label>
+                        {% endfor %}
                     </div>
                 </div>
 
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label class="form-label fw-bold" for="ticketNumber">Ticket / Reference Number</label>
-                        <input class="form-control" id="ticketNumber" name="ticket_number" type="text" placeholder="Example: TVS-2026-0001" required>
+                        <input class="form-control" id="ticketNumber" name="ticket_number" type="text" value="{{ form_data.ticket_number }}" placeholder="Example: TVS-2026-A1B2C3" required>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-bold" for="plateNumber">Plate Number</label>
-                        <input class="form-control" id="plateNumber" name="plate_number" type="text" placeholder="Example: ABC 1234" required>
+                        <input class="form-control" id="plateNumber" name="plate_number" type="text" value="{{ form_data.plate_number }}" placeholder="Example: SZA 2001" required>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-bold" for="violationType">Violation</label>
-                        <input class="form-control" id="violationType" name="violation_type" type="text" placeholder="Example: Illegal parking" required>
+                        <input class="form-control" id="violationType" type="text" value="{% if receipt %}{{ receipt.violation_type }}{% endif %}" placeholder="Filled after a valid reference is submitted" readonly>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-bold" for="amount">Fine Amount</label>
-                        <input class="form-control" id="amount" name="amount_paid" type="number" min="0" step="0.01" placeholder="PHP 0.00" required>
+                        <input class="form-control" id="amount" type="text" value="{% if receipt %}PHP {{ receipt.amount_paid }}{% endif %}" placeholder="Filled after a valid reference is submitted" readonly>
                     </div>
                 </div>
 
                 <div class="alert alert-warning mt-3 mb-3">
-                    This creates a temporary payment record for admin review. The admin can mark it Paid after verifying the provider/cashier receipt.
+                    The ticket/reference number must already exist in the admin panel and match the plate number before a payment record can be created.
                 </div>
 
                 <div class="d-flex flex-wrap gap-2">
@@ -125,7 +103,7 @@
                     <a class="btn btn-outline-dark" href="/payments/">Back to Payment Methods</a>
                 </div>
                 {% endif %}
-                <p class="text-muted small mb-0 mt-3">Keep this temporary receipt and compare it with the official receipt from the payment provider or cashier.</p>
+                <p class="text-muted small mb-0 mt-3">Keep this temporary receipt and compare it with the official receipt from the payment provider.</p>
             </aside>
         </div>
     </div>
